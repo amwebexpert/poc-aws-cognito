@@ -2,7 +2,6 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-
 ## Note How to run in HTTPS mode
 
 - Create a Self Signed certificate
@@ -18,15 +17,22 @@ openssl rsa -in keytmp.pem -out key.pem
     "start": "export HTTPS=true&&SSL_CRT_FILE=cert.pem&&SSL_KEY_FILE=key.pem react-scripts start"
   },
 ```
-Ref: https://flaviocopes.com/react-how-to-configure-https-localhost/
+
+References:
+- https://flaviocopes.com/react-how-to-configure-https-localhost/
 
 
+## AWS Cognito concole
 
 Hosted UI Endpoint:
 - https://pocamwebexpertauth-dev.auth.us-east-1.amazoncognito.com/
 
 Test Your Hosted UI Endpoint:
 - https://pocamwebexpertauth-dev.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=hne2k6eoe1ignb4e6ge04iav1&redirect_uri=http://localhost:3000/
+
+
+OAuth 2.0 grant types: "code" vs "token":
+- Amazon Cognito / User pools / <pool-name> / App Integration TAB / App client: <app-client-id>
 
 
 ## Available Scripts

@@ -8,6 +8,7 @@ import { getLocations, loadAuthSessionInfo } from "./cognitoUtils";
 const App = () => {
   const [user, setUser] = useState();
   const [tokens, setTokens] = useState();
+  const isSignedIn = !!user;
 
   useEffect(() => {
     const loadInfo = async () => {
@@ -23,22 +24,26 @@ const App = () => {
     <main className="container">
       <h2>AWS Cognito Authentication POC</h2>
 
-      <Button className="pb-2" onClick={() => Auth.federatedSignIn()}>
-        Sign In with Hosted UI
-      </Button>
+      {!isSignedIn && (
+        <Button className="pb-2 m-1" onClick={() => Auth.federatedSignIn()}>
+          Sign In with Hosted UI
+        </Button>
+      )}
 
-      <Button className="pb-2" onClick={() => Auth.signOut()}>
-        Sign Out
-      </Button>
+      {isSignedIn && (
+        <Button className="pb-2 m-1" onClick={() => Auth.signOut()}>
+          Sign Out
+        </Button>
+      )}
 
-      <Button className="pb-2" onClick={() => getLocations()} disabled={true}>
+      <Button className="pb-2 m-1" onClick={() => getLocations()} disabled={true}>
         Get API Locations
       </Button>
 
       <textarea
         wrap="off"
         style={{ width: "100%", marginTop: "1rem" }}
-        rows={10}
+        rows={20}
         value={JSON.stringify(user, null, 4)}
         readOnly={true}
       />

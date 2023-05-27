@@ -30,7 +30,7 @@ const configs = {
       scope: ["openid", "email"],
       redirectSignIn: APP_URL,
       redirectSignOut: APP_URL,
-      responseType: "code", // code or token
+      responseType: "token",  // or 'token', note that REFRESH token will only be generated when the responseType is code
       // optional, for Cognito hosted ui specified options
       options: {
         // Indicates if the data collection is enabled to support Cognito advanced security features. By default, this flag is set to true.
