@@ -1,5 +1,6 @@
 import { Amplify, Auth, API } from "aws-amplify";
 import amplifyConfig from "./aws-exports";
+import jwt_decode from "jwt-decode";
 
 //  https://docs.amplify.aws/lib/client-configuration/configuring-amplify-categories/q/platform/js/#top-level-configuration
 Amplify.configure(amplifyConfig);
@@ -50,6 +51,24 @@ export const getTokensFromSession = async (session) => {
   const refreshToken = session.getRefreshToken().getToken();
 
   return { token, idToken, refreshToken };
+};
+
+export const getAccessTokenExpirationDate = (token = "") => {
+  if (!token) {
+    return "-";
+  }
+
+  const decodedTokenInfo = jwt_decode(token);
+  return new Date(decodedTokenInfo.exp * 1000).toISOString();
+};
+
+export const getAccessTokenCreationDate = (token = "") => {
+  if (!token) {
+    return "-";
+  }
+
+  const decodedTokenInfo = jwt_decode(token);
+  return new Date(decodedTokenInfo.iat * 1000).toISOString();
 };
 
 export const getLocations = async () => {

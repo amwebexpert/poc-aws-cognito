@@ -3,6 +3,8 @@ import Button from "react-bootstrap/Button";
 
 import { Auth } from "aws-amplify";
 import {
+  getAccessTokenCreationDate,
+  getAccessTokenExpirationDate,
   getLocations,
   getTokensFromSession,
   loadAuthSessionInfo,
@@ -59,7 +61,9 @@ const App = () => {
         Get API Locations
       </Button>
 
-      <p>{tokens?.token ?? ""}</p>
+      <p>Token: {tokens?.token ?? ""}</p>
+      <p>Created at: {getAccessTokenCreationDate(tokens?.token)}</p>
+      <p>Expire at: {getAccessTokenExpirationDate(tokens?.token)}</p>
 
       <textarea
         wrap="off"
