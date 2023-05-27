@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pocawscognito-dev-114004-authRole",
+      "UnauthRoleArn": "arn:aws:iam::871860149353:role/amplify-pocawscognito-dev-114004-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::871860149353:role/amplify-pocawscognito-dev-114004-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-pocawscognito-dev-114004-deployment",
+      "UnauthRoleName": "amplify-pocawscognito-dev-114004-unauthRole",
+      "StackName": "amplify-pocawscognito-dev-114004",
+      "StackId": "arn:aws:cloudformation:us-east-1:871860149353:stack/amplify-pocawscognito-dev-114004/c0b002b0-fca4-11ed-9a2b-0ea2c4c157c3",
+      "AmplifyAppId": "d2f2ukepjeelw2"
+    },
+    "categories": {
+      "auth": {
+        "pocawscognitoaa833618": {}
+      }
+    }
+  }
+}
