@@ -1,9 +1,8 @@
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 
 import { Amplify, Auth, API } from "aws-amplify";
-import { PROJECT, OAUTH_DOMAIN, API_URL } from "./config/amplifyConfig";
-import amplifyConfig from "./config/amplifyConfig";
+import amplifyConfig from "./aws-exports";
 
 //  https://docs.amplify.aws/lib/client-configuration/configuring-amplify-categories/q/platform/js/#top-level-configuration
 Amplify.configure(amplifyConfig);
@@ -15,6 +14,24 @@ const getUserSession = async () => {
       return error ? reject(error) : resolve(session);
     });
   });
+};
+
+const loadAuthSessionInfo = async () => {
+  try {
+    const user = await Auth.currentAuthenticatedUser();
+    const session = await Auth.currentSession();
+
+    const token = session.getAccessToken().getJwtToken();
+    const idToken = session.getIdToken().getJwtToken();
+    const refreshToken = session.getRefreshToken().getToken();
+
+    const tokens = { token, idToken, refreshToken };
+    return { user, tokens };
+  } catch (_error) {
+    console.log("user not authenticated");
+  }
+
+  return {};
 };
 
 const refreshAuthSession = async () => {
@@ -30,20 +47,7 @@ const refreshAuthSession = async () => {
   });
 };
 
-async function currentUser() {
-  try {
-    console.info("currentUser------ ");
-
-    const user = await Auth.currentAuthenticatedUser();
-    console.info(user);
-    alert(JSON.stringify(user, null, 2));
-  } catch (error) {
-    console.log("error signing in", error);
-    alert("Not Signed In");
-  }
-}
-
-async function getLocations() {
+const getLocations = async () => {
   const session = await Auth.currentSession();
   const token = session.getAccessToken().getJwtToken();
   const idToken = session.getIdToken().getJwtToken();
@@ -61,48 +65,58 @@ async function getLocations() {
   );
   console.info(locations);
   alert(JSON.stringify(locations, null, 2));
-}
+};
 
 // https://docs.amplify.aws/lib/auth/social/q/platform/js/#full-sample
-function FederatedForm() {
-  return (
-    <>
-      <h1>Authentication POC for Stelar</h1>
-      <h3>Project: {PROJECT}</h3>
-      <h3>OAuth Domain: {OAUTH_DOMAIN}</h3>
-      <h3>Api URL: {API_URL}api</h3>
-      <Form className="pt-5">
-        <Button className="pb-2" onClick={() => Auth.federatedSignIn()}>
-          Sign In with Hosted UI
-        </Button>
-        <br></br>
-        <br></br>
-        <Button className="pb-2" onClick={() => currentUser()}>
-          Current User
-        </Button>
-        <br></br>
-        <br></br>
-        <Button className="pb-2" onClick={() => getLocations()}>
-          Get API Locations
-        </Button>
-        <br></br>
-        <br></br>
-        <Button className="pb-2" onClick={() => Auth.signOut()}>
-          Sign Out
-        </Button>
-      </Form>
-    </>
-  );
-}
+export const CognitoExample = () => {};
 
-function App() {
+const App = () => {
+  const [user, setUser] = useState();
+  const [tokens, setTokens] = useState();
+
+  useEffect(() => {
+    const loadInfo = async () => {
+      const { user, tokens } = await loadAuthSessionInfo();
+      setTokens(tokens);
+      setUser(user);
+    };
+
+    loadInfo();
+  }, []);
+
   return (
     <main className="container">
-      <div className="mt-5">
-        <FederatedForm />
-      </div>
+      <h2>Authentication POC</h2>
+
+      <Button className="pb-2" onClick={() => Auth.federatedSignIn()}>
+        Sign In with Hosted UI
+      </Button>
+
+      <Button className="pb-2" onClick={() => Auth.signOut()}>
+        Sign Out
+      </Button>
+
+      <Button className="pb-2" onClick={() => getLocations()} disabled={true}>
+        Get API Locations
+      </Button>
+
+      <textarea
+        wrap="off"
+        style={{ width: "100%", marginTop: "1rem" }}
+        rows={10}
+        value={JSON.stringify(user, null, 4)}
+        readOnly={true}
+      />
+
+      <textarea
+        wrap="off"
+        style={{ width: "100%", marginTop: "1rem" }}
+        rows={5}
+        value={JSON.stringify(tokens, null, 4)}
+        readOnly={true}
+      />
     </main>
   );
-}
+};
 
 export default App;
