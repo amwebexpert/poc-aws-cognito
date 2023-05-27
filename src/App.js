@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 
 import { Auth } from "aws-amplify";
-import { getLocations, loadAuthSessionInfo } from "./cognitoUtils";
+import {
+  getLocations,
+  getTokensFromSession,
+  loadAuthSessionInfo,
+  refreshAuthSession,
+} from "./cognitoUtils";
 
 // https://docs.amplify.aws/lib/auth/social/q/platform/js/#full-sample
 const App = () => {
@@ -18,7 +23,13 @@ const App = () => {
     };
 
     loadInfo();
-  }, []);
+  }, [tokens]);
+
+  const handleRefreshSession = async () => {
+    const session = await refreshAuthSession();
+    const tokens = getTokensFromSession(session);
+    setTokens(tokens);
+  };
 
   return (
     <main className="container">
@@ -36,9 +47,19 @@ const App = () => {
         </Button>
       )}
 
-      <Button className="pb-2 m-1" onClick={() => getLocations()} disabled={true}>
+      <Button
+        className="pb-2 m-1"
+        onClick={handleRefreshSession}
+        disabled={!isSignedIn}
+      >
+        Refresh token
+      </Button>
+
+      <Button className="pb-2 m-1" onClick={getLocations} disabled={true}>
         Get API Locations
       </Button>
+
+      <p>{tokens?.token ?? ""}</p>
 
       <textarea
         wrap="off"

@@ -44,12 +44,17 @@ export const refreshAuthSession = async () => {
   });
 };
 
-export const getLocations = async () => {
-  const session = await Auth.currentSession();
+export const getTokensFromSession = async (session) => {
   const token = session.getAccessToken().getJwtToken();
   const idToken = session.getIdToken().getJwtToken();
   const refreshToken = session.getRefreshToken().getToken();
-  console.log("current session", session);
+
+  return { token, idToken, refreshToken };
+};
+
+export const getLocations = async () => {
+  const session = await Auth.currentSession();
+  const { token, idToken, refreshToken } = getTokensFromSession(session);
   console.log("current tokens", { token, idToken, refreshToken });
 
   const authorizationHeader = { Authorization: `Bearer ${idToken}` };
@@ -63,4 +68,3 @@ export const getLocations = async () => {
   console.info(locations);
   alert(JSON.stringify(locations, null, 2));
 };
-
