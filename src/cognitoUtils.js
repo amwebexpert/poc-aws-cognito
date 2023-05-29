@@ -59,7 +59,7 @@ export const getAccessTokenExpirationDate = (token = "") => {
   }
 
   const decodedTokenInfo = jwt_decode(token);
-  return new Date(decodedTokenInfo.exp * 1000).toISOString();
+  return new Date(decodedTokenInfo.exp * 1000).toString();
 };
 
 export const getAccessTokenCreationDate = (token = "") => {
@@ -68,7 +68,7 @@ export const getAccessTokenCreationDate = (token = "") => {
   }
 
   const decodedTokenInfo = jwt_decode(token);
-  return new Date(decodedTokenInfo.iat * 1000).toISOString();
+  return new Date(decodedTokenInfo.iat * 1000).toString();
 };
 
 export const getLocations = async () => {

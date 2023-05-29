@@ -16,6 +16,8 @@ const App = () => {
   const [user, setUser] = useState();
   const [tokens, setTokens] = useState();
   const isSignedIn = !!user;
+  const token = tokens?.token ?? "";
+  const displayToken = token ? `${token.slice(0, 10)}...${token.slice(-40)}` : "";
 
   useEffect(() => {
     const loadInfo = async () => {
@@ -61,9 +63,11 @@ const App = () => {
         Get API Locations
       </Button>
 
-      <p>Token: {tokens?.token ?? ""}</p>
-      <p>Created at: {getAccessTokenCreationDate(tokens?.token)}</p>
-      <p>Expire at: {getAccessTokenExpirationDate(tokens?.token)}</p>
+      <ul style={{ width: "100%", marginTop: "1rem" }}>
+        <li>Token: <strong>{displayToken}</strong></li>
+        <li>Creation: <strong>{getAccessTokenCreationDate(tokens?.token)}</strong></li>
+        <li>Expiration: <strong>{getAccessTokenExpirationDate(tokens?.token)}</strong></li>
+      </ul>
 
       <textarea
         wrap="off"
