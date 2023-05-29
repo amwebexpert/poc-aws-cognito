@@ -99,7 +99,7 @@ const App = () => {
       <textarea
         wrap="off"
         style={{ width: "100%", marginTop: "1rem" }}
-        rows={20}
+        rows={15}
         value={JSON.stringify(user, null, 4)}
         readOnly={true}
       />
