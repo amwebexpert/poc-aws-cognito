@@ -53,23 +53,11 @@ export const getTokensFromSession = async (session) => {
   return { token, idToken, refreshToken };
 };
 
-export const getAccessTokenExpirationDate = (token = "") => {
-  if (!token) {
-    return "-";
-  }
+export const getAccessTokenExpirationDate = (token = "") =>
+  !token ? "-" : new Date(jwt_decode(token).exp * 1000).toString();
 
-  const decodedTokenInfo = jwt_decode(token);
-  return new Date(decodedTokenInfo.exp * 1000).toString();
-};
-
-export const getAccessTokenCreationDate = (token = "") => {
-  if (!token) {
-    return "-";
-  }
-
-  const decodedTokenInfo = jwt_decode(token);
-  return new Date(decodedTokenInfo.iat * 1000).toString();
-};
+export const getAccessTokenCreationDate = (token = "") =>
+  !token ? "-" : new Date(jwt_decode(token).iat * 1000).toString();
 
 export const getLocations = async () => {
   const session = await Auth.currentSession();
