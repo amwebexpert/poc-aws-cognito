@@ -5,6 +5,8 @@ import jwt_decode from "jwt-decode";
 //  https://docs.amplify.aws/lib/client-configuration/configuring-amplify-categories/q/platform/js/#top-level-configuration
 Amplify.configure(amplifyConfig);
 
+const REFRESH_TOKEN_DELTA_IN_SECONDS = 60; // seconds
+
 export const getUserSession = async () => {
   const cognitoUser = await Auth.currentAuthenticatedUser();
   return new Promise((resolve, reject) => {
@@ -53,11 +55,31 @@ export const getTokensFromSession = async (session) => {
   return { token, idToken, refreshToken };
 };
 
-export const getAccessTokenExpirationDate = (token = "") =>
-  !token ? "-" : new Date(jwt_decode(token).exp * 1000).toString();
+export const getTokenRefreshTimeout = (token = "") => {
+  const decodedTokenInfo = jwt_decode(token);
+  const refreshSessionAt = new Date(
+    (decodedTokenInfo.exp - REFRESH_TOKEN_DELTA_IN_SECONDS) * 1000
+  );
 
-export const getAccessTokenCreationDate = (token = "") =>
-  !token ? "-" : new Date(jwt_decode(token).iat * 1000).toString();
+  let timeoutDuration = refreshSessionAt.getTime() - Date.now();
+  if (timeoutDuration < 0) {
+    timeoutDuration = 0;
+  }
+
+  return timeoutDuration;
+};
+
+export const getAccessTokenDates = (token = "") => {
+  if (!token) {
+    return { creationDate: "-", expirationDate: "-" };
+  }
+
+  const { exp, iat } = jwt_decode(token);
+  return {
+    creationDate: new Date(iat * 1000).toString(),
+    expirationDate: new Date(exp * 1000).toString(),
+  };
+};
 
 export const getLocations = async () => {
   const session = await Auth.currentSession();

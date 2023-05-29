@@ -3,9 +3,9 @@ import Button from "react-bootstrap/Button";
 
 import { Auth } from "aws-amplify";
 import {
-  getAccessTokenCreationDate,
-  getAccessTokenExpirationDate,
+  getAccessTokenDates,
   getLocations,
+  getTokenRefreshTimeout,
   getTokensFromSession,
   loadAuthSessionInfo,
   refreshAuthSession,
@@ -15,9 +15,13 @@ import {
 const App = () => {
   const [user, setUser] = useState();
   const [tokens, setTokens] = useState();
+
+  // computed props
   const isSignedIn = !!user;
-  const token = tokens?.token ?? "";
-  const displayToken = token ? `${token.slice(0, 10)}...${token.slice(-40)}` : "";
+  const { creationDate, expirationDate } = getAccessTokenDates(tokens?.token);
+  const displayToken = tokens?.token
+    ? `${tokens.token.slice(0, 10)}...${tokens.token.slice(-40)}`
+    : "";
 
   useEffect(() => {
     const loadInfo = async () => {
@@ -31,9 +35,26 @@ const App = () => {
 
   const handleRefreshSession = async () => {
     const session = await refreshAuthSession();
-    const tokens = getTokensFromSession(session);
-    setTokens(tokens);
+    setTokens(getTokensFromSession(session));
   };
+
+  useEffect(() => {
+    if (!tokens?.token) {
+      return;
+    }
+
+    const timeoutDuration = getTokenRefreshTimeout(tokens.token);
+    console.log(
+      `Will refresh token after ${Math.floor(timeoutDuration / 1000)} sec`
+    );
+    const timeoutID = setTimeout(() => {
+      refreshAuthSession().then((session) =>
+        setTokens(getTokensFromSession(session))
+      );
+    }, timeoutDuration);
+
+    return () => clearTimeout(timeoutID);
+  }, [tokens?.token]);
 
   return (
     <main className="container">
@@ -64,9 +85,15 @@ const App = () => {
       </Button>
 
       <ul style={{ width: "100%", marginTop: "1rem" }}>
-        <li>Token: <strong>{displayToken}</strong></li>
-        <li>Creation: <strong>{getAccessTokenCreationDate(tokens?.token)}</strong></li>
-        <li>Expiration: <strong>{getAccessTokenExpirationDate(tokens?.token)}</strong></li>
+        <li>
+          Token: <pre>{displayToken}</pre>
+        </li>
+        <li>
+          Creation: <pre>{creationDate}</pre>
+        </li>
+        <li>
+          Expiration: <pre>{expirationDate}</pre>
+        </li>
       </ul>
 
       <textarea
