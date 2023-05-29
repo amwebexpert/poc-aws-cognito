@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# poc-aws-cognito
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+POC with React app connecting to AWS Cognito through amplify-js library
 
 ## Note How to run in HTTPS mode
 
@@ -31,11 +31,14 @@ Test Your Hosted UI Endpoint:
 - https://pocamwebexpertauth-dev.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=hne2k6eoe1ignb4e6ge04iav1&redirect_uri=http://localhost:3000/
 
 
-OAuth 2.0 grant types: "code" vs "token":
-- Amazon Cognito / User pools / <pool-name> / App Integration TAB / App client: <app-client-id>
+### OAuth 2.0 grant types: "code" vs "token"
+
+- Amazon Cognito / User pools / the-pool-name-here / App Integration TAB / App client: the-app-client-id-here
 
 
 ## Available Scripts
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 In the project directory, you can run:
 
