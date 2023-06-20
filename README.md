@@ -35,6 +35,10 @@ Test Your Hosted UI Endpoint:
 
 - Amazon Cognito / User pools / the-pool-name-here / App Integration TAB / App client: the-app-client-id-here
 
+### Disable self-service sign-up
+
+- Amazon Cognito / User pools / the-pool-name-here / Sign-up experience TAB / then disable the option inside "Self-service sign-up" panel
+
 
 ## Available Scripts
 
