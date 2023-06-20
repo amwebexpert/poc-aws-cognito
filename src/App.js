@@ -99,13 +99,19 @@ const App = () => {
 
       <div
         style={{
-          marginTop: "1rem",
-          padding: "1rem",
+          padding: "2rem",
           border: "1px solid red",
         }}
       >
         <h3>@aws-amplify/ui-react</h3>
-        <LoginForm />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <LoginForm />
+        </div>
       </div>
 
       <textarea
