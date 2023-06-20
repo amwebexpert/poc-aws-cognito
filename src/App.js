@@ -10,6 +10,7 @@ import {
   loadAuthSessionInfo,
   refreshAuthSession,
 } from "./cognitoUtils";
+import LoginForm from "./ui-react/LoginForm";
 
 // https://docs.amplify.aws/lib/auth/social/q/platform/js/#full-sample
 const App = () => {
@@ -95,6 +96,17 @@ const App = () => {
           Expiration: <pre>{expirationDate}</pre>
         </li>
       </ul>
+
+      <div
+        style={{
+          marginTop: "1rem",
+          padding: "1rem",
+          border: "1px solid red",
+        }}
+      >
+        <h3>@aws-amplify/ui-react</h3>
+        <LoginForm />
+      </div>
 
       <textarea
         wrap="off"
