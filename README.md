@@ -40,6 +40,10 @@ Test Your Hosted UI Endpoint:
 - Amazon Cognito / User pools / the-pool-name-here / Sign-up experience TAB / then disable the option inside "Self-service sign-up" panel
 
 
+### Change token expiration times
+
+- Amazon Cognito / User pools / the-pool-name-here / App client: the-app-client-here
+
 ## Available Scripts
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
